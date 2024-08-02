@@ -88,19 +88,38 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  border: 2px solid #0E0E7A;
+  border-radius: 10px;
+  padding: 30px;
+  margin: 40px;
+  font-family: "azo-sans-web";
+  font-weight: 500;
+  font-size: 1.2rem;
+  
 }
 
 .form > * {
   margin-bottom: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  font-family: "azo-sans-web";
 }
 
 .form > button {
   cursor: pointer;
   transition: 0.15s ease;
+  color: #000000;
+  background-color: #214cd9;
+  border-radius: 10px;
+  font-family: "azo-sans-web";
+  font-weight: 300;
+  padding: 2px 15px 2px 15px;
+  font-size: 1rem;
 }
+
 .form>button:is(:hover, :focus, :active) {
-  color: #fafafa;
-  background-color: #222;
+  color: #000000;
+  background-color: #7a99ff;
 }
 
 .card:is(:hover, :focus, :active) {

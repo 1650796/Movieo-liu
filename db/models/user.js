@@ -1,5 +1,6 @@
 import { Schema, model, models } from 'mongoose'
 import bcrypt from 'bcrypt'
+import movieSchema from './movie'
 
 const UserSchema = new Schema({
   username: {
@@ -13,6 +14,7 @@ const UserSchema = new Schema({
     minLength: 5,
     maxLength: 200
   },
+  favoriteMovies: [movieSchema]
 })
 
 // hashes the password before it's stored in mongo
