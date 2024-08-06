@@ -3,16 +3,24 @@ import Head from "next/head";
 import sessionOptions from "../config/session";
 import Header from '../components/header';
 import { useState } from 'react';
-import styles from '../styles/Movies.module.css';
-import Link from "next/link";
+import { useRouter } from 'next/router'
+import { searchMovies } from "../db/controllers/movie";
+import MoviePreview from "../components/moviePreview/moviePreview";
+import styles from '../styles/Home.module.css';
+
 
 export const getServerSideProps = withIronSessionSsr(
-  async function getServerSideProps({ req }) {
+  async function getServerSideProps({ req, query }) {
     const { user } = req.session;
     const props = {};
+
     if (user) {
       props.user = req.session.user;
       props.isLoggedIn = true;
+      if (query.q) {
+        props.movies = await searchMovies(query.q)
+        console.log(props.movies)
+      }
     } else {
       props.isLoggedIn = false;
     }
@@ -23,25 +31,21 @@ export const getServerSideProps = withIronSessionSsr(
 
 export default function Search(props) {
   const [query, setQuery] = useState("")
+  const [previousQuery, setPreviousQuery] = useState()
+  const router = useRouter()
   const [fetching, setFetching] = useState(false)
-  const [movieInfo, setMovieInfo] = useState([])
+  let movies = props.movies;
 
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault()
-    if (fetching || !query.trim()) return
-    setFetching(true)
     try {
-        const res = await fetch(
-            `https://www.omdbapi.com/?apikey=f47eb4f1&s=${query}`
-        )
-        const movieData = await res.json()
-        console.log(movieData)
-        if (movieData.Search){
-            setMovieInfo(movieData.Search)
-            setQuery("")
-        }
+      if (fetching || !query.trim() || query === previousQuery) return
+      setPreviousQuery(query)
+      setFetching(true)
+      router.replace(router.pathname + `?q=${query}`)
+
     } catch (err) {
-        return res.status(400).json({ error: err.message })
+        return res.status(400).json({ error: err.message })     
     }
     setFetching(false)
   }
@@ -50,12 +54,13 @@ export default function Search(props) {
     <>
       <Head>
         <title>Search Page</title>
-        <meta name="description" content="Movieo search page" />
+        <meta name="description" content="Search for movies or shows." />
         <link rel="icon" href="/filmblack.png" />
       </Head>
 
       <Header isLoggedIn={props.isLoggedIn} username={props?.user?.username} />
-      <main>
+
+      <main className={styles.main}>
         <h1 className={styles.title}>Search</h1>
         <form onSubmit={handleSubmit} className={styles.form}>
           <label htmlFor="movie-search">Search by movie/show title:</label>
@@ -71,46 +76,30 @@ export default function Search(props) {
           </div>
         </form>
 
-        {fetching && (
-           <Loading />
-        )}
+        {
+        fetching 
+        ? <Loading />
+        : movies?.length > 0
+        ? <section>
+          {movies.map((movie) => (
+            <MoviePreview
+              key={movie.imdbID}
+              imdbID={movie.imdbID}
+              title={movie.Title}
+              poster={movie.Poster}
+              />
+            )
+          )}
+        </section>
+        : <p>No movies/shows found. Try again?</p>
+      }
 
-        <div className={[styles.container, styles.list]}>
-            {movieInfo && movieInfo.length > 0 && (
-                movieInfo.map((movie) => (
-                  <div key={movie.imdbID}>
-                    {movie.Poster === "N/A" ? (
-                        <Link 
-                        href={`/movie/${movie.imdbID}`} 
-                        style={{textDecoration: 'none'}}
-                        >
-                        <img
-                        src="https://via.placeholder.com/128x190?text=NO POSTER"
-                        alt={movie.Title} />
-                        </Link>
-                    ) : (
-                        <Link 
-                        href={`/movie/${movie.imdbID}`} 
-                        style={{textDecoration: 'none'}}
-                        >
-                        <img
-                        src={movie.Poster}
-                        alt={movie.Title} />
-                        </Link>
-                    )}
-                    </div>
-                ))
-            )}
-            </div>
-
-            {movieInfo.length === 0 && (
-                <p>No movies/shows found. Try again?</p>
-            )}
       </main>
     </>
-  )
-}
+    )}
+
 
 function Loading() {
   return <span className={styles.loading}>Loading...</span>
 }
+
