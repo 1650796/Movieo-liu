@@ -33,32 +33,29 @@ export default function Search(props) {
   const [query, setQuery] = useState("")
   const [previousQuery, setPreviousQuery] = useState()
   const router = useRouter()
-  const [fetching, setFetching] = useState(false)
   let movies = props.movies;
 
   function handleSubmit(e) {
     e.preventDefault()
     try {
-      if (fetching || !query.trim() || query === previousQuery) return
+      if (!query.trim() || query === previousQuery) return
       setPreviousQuery(query)
-      setFetching(true)
-      router.replace(router.pathname + `?q=${query}`)
+      router.replace(router.pathname + `?q=${query}`);
 
     } catch (err) {
-        return res.status(400).json({ error: err.message })     
+        console.log(err);    
     }
-    setFetching(false)
   }
 
   return (
-    <>
+    <div className={styles.container}>
       <Head>
         <title>Search Page</title>
         <meta name="description" content="Search for movies or shows." />
         <link rel="icon" href="/filmblack.png" />
       </Head>
 
-      <Header isLoggedIn={props.isLoggedIn} username={props?.user?.username} />
+      <Header isLoggedIn={props.isLoggedIn} name={props?.user?.name} />
 
       <main className={styles.main}>
         <h1 className={styles.title}>Search</h1>
@@ -77,25 +74,36 @@ export default function Search(props) {
         </form>
 
         {
-        fetching 
+        !movies && previousQuery 
         ? <Loading />
         : movies?.length > 0
-        ? <section>
+        ? (
+        <div className={styles.list}> 
           {movies.map((movie) => (
+            <div>
+          {movie.Poster !== "N/A" ? (
             <MoviePreview
               key={movie.imdbID}
               imdbID={movie.imdbID}
               title={movie.Title}
               poster={movie.Poster}
-              />
+            />
+            ) : (
+            <MoviePreview
+              key={movie.imdbID}
+              imdbID={movie.imdbID}
+              title={movie.Title}
+            />
+            )}
+            </div>
             )
           )}
-        </section>
-        : <p>No movies/shows found. Try again?</p>
+        </div>
+        )
+        : previousQuery && <p>No movies/shows found. Try again?</p>
       }
-
       </main>
-    </>
+    </div>
     )}
 
 

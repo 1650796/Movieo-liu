@@ -11,11 +11,11 @@ export default function Header(props) {
         <>
           <p>
             <Link href="/">
-              <Image src="/film.png" alt="Movieo Logo" width={100} height={100} />
+              <Image src="/film.png" alt="Movieo Logo" width={80} height={80} />
             </Link>
           </p>
           <div className={styles.menu}>
-            <p className={styles.name}>Welcome, {props.username}!</p>
+            <p className={styles.name}>Welcome, {props.name}!</p>
             <p>
               <Link href="/search">Search</Link>
             </p>

@@ -58,24 +58,15 @@ export default function Login(props) {
         <link rel="icon" href="/filmblack.png" />
       </Head>
 
-      <Header isLoggedIn={props.isLoggedIn} username={props?.user?.username} />
+      <Header isLoggedIn={props.isLoggedIn} />
 
       <main className={styles.main}>
         <h1 className={styles.title}>
           Login
         </h1>
 
-        <p className={styles.description}>
-          Current Location: <code className={styles.code}>{router.asPath}</code>
-          <br />
-          Status:{" "}
-          <code className={styles.code}>
-            {!props.isLoggedIn && " Not"} Logged In
-          </code>
-        </p>
-
         <form
-          className={[styles.card, styles.form].join(" ")}
+          className={styles.form}
           onSubmit={handleLogin}
         >
           <label htmlFor="username">Username: </label>

@@ -5,13 +5,36 @@ body {
   font-family: "azo-sans-web"
 }
 
+h2 {
+  font-family: "Azo-Sans-Web";
+  font-weight: 400;
+  font-size: 1.3rem;
+}
+
 a {
-  color: #214cd9;
+  color: #0051f3;
   text-decoration: none;
 }
 
 a:hover {
-  color: #7a99ff;
+  color: #94b7ff;
+}
+
+button {
+  cursor: pointer;
+  transition: 0.15s ease;
+  color: #d0e0ff;
+  background-color: #0051f3;
+  border-radius: 10px;
+  font-family: "azo-sans-web";
+  font-weight: 300;
+  padding: 2px 15px 2px 15px;
+  font-size: 1rem;
+}
+
+button:is(:hover, :focus, :active) {
+  color: #d0e0ff;
+  background-color: #002c85;
 }
 
 * {

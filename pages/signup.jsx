@@ -4,13 +4,16 @@ import Link from "next/link";
 import { useState } from "react";
 import styles from "../styles/Home.module.css";
 import { useRouter } from "next/router";
+import Header from "../components/header";
+
 
 export default function Signup(props) {
   const router = useRouter();
   const [
-    { username, password, "confirm-password": confirmPassword },
+    { name, username, password, "confirm-password": confirmPassword },
     setForm,
   ] = useState({
+    name: "",
     username: "",
     password: "",
     "confirm-password": "",
@@ -19,6 +22,7 @@ export default function Signup(props) {
 
   function handleChange(e) {
     setForm({
+      name,
       username,
       password,
       "confirm-password": confirmPassword,
@@ -27,6 +31,7 @@ export default function Signup(props) {
   }
   async function handleCreateAccount(e) {
     e.preventDefault();
+    if (!name) return setError("Must include name");
     if (!username) return setError("Must include username");
     if (password !== confirmPassword) return setError("Passwords must Match");
 
@@ -36,7 +41,7 @@ export default function Signup(props) {
         headers: {
           "content-type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ name, username, password }),
       });
       if (res.status === 200) return router.push("/");
       const { error: message } = await res.json();
@@ -53,24 +58,25 @@ export default function Signup(props) {
         <link rel="icon" href="/filmblack.png" />
       </Head>
 
+      <Header isLoggedIn={props.isLoggedIn} />
+
       <main className={styles.main}>
         <h1 className={styles.title}>
           Signup
         </h1>
 
-        <p className={styles.description}>
-          Current Location: <code className={styles.code}>{router.asPath}</code>
-          <br />
-          Status:{" "}
-          <code className={styles.code}>
-            {!props.isLoggedIn && " Not"} Logged In
-          </code>
-        </p>
-
         <form
-          className={[styles.card, styles.form].join(" ")}
+          className={styles.form}
           onSubmit={handleCreateAccount}
         >
+          <label htmlFor="name">Name: </label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            onChange={handleChange}
+            value={name}
+          />          
           <label htmlFor="username">Username: </label>
           <input
             type="text"

@@ -6,7 +6,6 @@ import { withIronSessionSsr } from "iron-session/next";
 import sessionOptions from "../config/session";
 import styles from "../styles/Home.module.css";
 import Header from "../components/header";
-import useLogout from "../hooks/useLogout";
 
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps({ req }) {
@@ -25,7 +24,7 @@ export const getServerSideProps = withIronSessionSsr(
 
 export default function Home(props) {
   const router = useRouter();
-  const logout = useLogout();
+
   return (
     <div className={styles.container}>
       <Head>
@@ -34,7 +33,7 @@ export default function Home(props) {
         <link rel="icon" href="/filmblack.png" />
       </Head>
 
-      <Header isLoggedIn={props.isLoggedIn} username={props?.user?.username} />
+      <Header isLoggedIn={props.isLoggedIn} name={props?.user?.name} />
 
       <main className={styles.main}>
         <h1 className={styles.title}>
@@ -42,40 +41,31 @@ export default function Home(props) {
         </h1>
 
         <p className={styles.description}>
-          Current Location: <code className={styles.code}>{router.asPath}</code>
-          <br />
-          Status:{" "}
-          <code className={styles.code}>
-            {!props.isLoggedIn && " Not"} Logged In
-          </code>
+          A simple app to track your favorite movies and shows. 
         </p>
+        <p>
+          Login or sign up to start adding your favorites!
+        </p>
+
 
         <div className={styles.grid}>
           {props.isLoggedIn ? (
             <>
-              <Link href="/dashboard" className={styles.card}>
-                <h2>Dashboard &rarr;</h2>
-                <p>This page is only visible if you are logged in.</p>
+              <Link href="/favorites" className={styles.card}>
+                <h2>Favorites &rarr;</h2>
               </Link>
-              <div
-                onClick={logout}
-                style={{ cursor: "pointer" }}
-                className={styles.card}
-              >
-                <h2>Logout &rarr;</h2>
-                <p>Click here to log out.</p>
-              </div>
+              <Link href="/search" className={styles.card}>
+                <h2>Search &rarr;</h2>
+              </Link>
             </>
           ) : (
             <>
               <Link href="/login" className={styles.card}>
                 <h2>Login &rarr;</h2>
-                <p>Visit the login page.</p>
               </Link>
 
               <Link href="/signup" className={styles.card}>
                 <h2>Create Account &rarr;</h2>
-                <p>Create an account.</p>
               </Link>
             </>
           )}

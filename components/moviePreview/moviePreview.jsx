@@ -12,7 +12,9 @@ export default function MoviePreview ({
                 href={`/movie/${imdbID}`} 
             >
             <img
-                src={poster ? poster : "https://via.placeholder.com/128x190?text=NO POSTER"}
+                src={poster 
+                    ? poster 
+                    : "https://via.placeholder.com/128x190?text=NO-POSTER"}
                 alt={title} 
             />
             <h2>{title}</h2>

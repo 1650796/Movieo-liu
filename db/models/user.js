@@ -3,6 +3,12 @@ import bcrypt from 'bcrypt'
 import movieSchema from './movie'
 
 const UserSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+    minLength: 1,
+    maxLength: 50
+  },
   username: {
     type: String,
     required: true,

@@ -40,14 +40,14 @@ async function logout(req, res) {
 }
 async function signup(req, res) {
   try {
-    const {username, password} = req.body
+    const {name, username, password} = req.body
     const {
       password: _,
       ...otherFields
-    } = await db.user.create(username, password)
+    } = await db.user.create(name, username, password)
     req.session.user = otherFields
     await req.session.save()
-    res.redirect('/dashboard')
+    res.redirect('/')
   } catch(err) {
     res.status(400).json({error: err.message})
   }
