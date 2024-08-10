@@ -80,17 +80,17 @@ export default function Search(props) {
         ? (
         <div className={styles.list}> 
           {movies.map((movie) => (
-            <div>
+            <div key={movie.imdbID}>
           {movie.Poster !== "N/A" ? (
             <MoviePreview
-              key={movie.imdbID}
+              //key={movie.imdbID}
               imdbID={movie.imdbID}
               title={movie.Title}
               poster={movie.Poster}
             />
             ) : (
             <MoviePreview
-              key={movie.imdbID}
+              //key={movie.imdbID}
               imdbID={movie.imdbID}
               title={movie.Title}
             />
@@ -100,7 +100,7 @@ export default function Search(props) {
           )}
         </div>
         )
-        : previousQuery && <p>No movies/shows found. Try again?</p>
+        : previousQuery && <p>No movies or shows found. Try again?</p>
       }
       </main>
     </div>

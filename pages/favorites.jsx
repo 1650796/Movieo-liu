@@ -43,24 +43,24 @@ export default function Favorites(props) {
         </h1>
 
         <p className={styles.description}>
-          Here are your recently-favorited movies/shows:
+          Here are your recently-favorited movies and shows:
         </p>
         {
         props.favoriteMovies?.length > 0
         ? (
         <div className={styles.list}> 
           {props.favoriteMovies.map((movie) => (
-            <div>
+            <div key={movie._id}>
           {movie.Poster !== "N/A" ? (
             <MoviePreview
-              key={movie.imdbID}
+              //key={movie.imdbID}
               imdbID={movie.imdbID}
               title={movie.Title}
               poster={movie.Poster}
             />
             ) : (
             <MoviePreview
-              key={movie.imdbID}
+              //key={movie.imdbID}
               imdbID={movie.imdbID}
               title={movie.Title}
             />
@@ -70,7 +70,7 @@ export default function Favorites(props) {
           )}
         </div>
         )
-        : <p>You currently don't have any titles saved.</p>
+        : <p>You currently do not have any titles saved.</p>
       }
 
         <div className={styles.grid}>
