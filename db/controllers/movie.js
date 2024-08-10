@@ -3,7 +3,7 @@ import dbConnect  from '../connection'
 //import normalize from '../normalize'
 
 export async function searchMovies(query) {
-  const response = await fetch(`https://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_OMDB_API}&s=${query}`)
+  const response = await fetch(`https://www.omdbapi.com/?apikey=f47eb4f1&s=${query}`)
   if (response.status !== 200)
     return null
   const data = await response.json()

@@ -19,7 +19,7 @@ export const getServerSideProps = withIronSessionSsr(
       props.isLoggedIn = true;
 
       const response = await fetch(
-        `https://www.omdbapi.com/?apikey=${process.env.NEXT_PUBLIC_OMDB_API}&i=${imdbID}`);
+        `https://www.omdbapi.com/?apikey=f47eb4f1&i=${imdbID}`);
       const movieData = await response.json();
       if (movieData) {
         props.movie = movieData;
